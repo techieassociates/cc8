@@ -1,0 +1,73 @@
+#ignore directories
+.gradle/
+.idea/
+/solr/
+/studio/
+/ThemeApp/
+/admin/
+/bin/
+/gradle/
+/gosuClassless/
+/javadoc/
+/java-api/
+/licenses/
+/repository/
+/doc/
+modules/configuration/build/
+modules/configuration/deploy/resources/
+modules/configuration/generated/
+modules/configuration/generated_classes/
+modules/configuration/plugins/Gosu/gclasses/
+modules/configuration/plugins/Gosu/idea-gclasses/
+#modules/configuration/webresources/ # see /modules/configuration/webresources/.gitignore
+#modules/schemas/
+modules/script/
+modules/*.*
+/upgrade/
+/webapps/
+#ignore other binary files
+build
+gwb
+#*.jar
+*.class
+*.zip
+#*.gradle
+*.bat
+*.sh
+*.iml
+#ignore files created by windows
+Thumbs.db
+*.lnk
+#ignore text files, except for order.txt for rulesets
+*.txt
+!order.txt
+*.doc
+*.docx
+#Ignore files build by Visual Studio
+*.obj
+*.exe
+*.pdb
+*.user
+*.aps
+*.pch
+*.vspscc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.tlb
+*.tlh
+*.bak
+*.cache
+*.ilk
+*.log
+*.dll
+*.lib
+*.sbr
+#Ignore properties file
+/*.properties
+*.iml
+#Ignore sourcetree stackdump
+*.stackdump
+/*.gradle
+*.pcfc
