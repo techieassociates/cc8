@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<plugin
+  interface="ContactSystemPlugin"
+  name="ContactSystemPlugin">
+  <plugin-gosu
+    gosuclass="gw.plugin.contact.ab800.ABContactSystemPlugin"/>
+</plugin>

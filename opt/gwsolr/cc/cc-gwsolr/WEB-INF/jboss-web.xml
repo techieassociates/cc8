@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jboss-web>
+  <context-root>cc-gwsolr</context-root>
+  <resource-env-ref>
+    <resource-env-ref-name>solr/home</resource-env-ref-name>
+    <jndi-name>/solr/home</jndi-name>
+  </resource-env-ref>
+</jboss-web>

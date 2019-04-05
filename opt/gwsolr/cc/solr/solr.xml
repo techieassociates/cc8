@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<solr persistent="true" sharedLib="lib">
+  <cores adminPath="/admin/cores" hostPort="8983" hostContext="cc-gwsolr">
+    <core name="cc_claimcontact_active" instanceDir="claimcontact_active"/>
+    <core name="cc_claimcontact_archive" instanceDir="claimcontact_archive"/>
+  </cores>
+</solr>

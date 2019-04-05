@@ -1,0 +1,87 @@
+package rules.Presetup.ClaimPresetup_dir
+
+@gw.rules.RuleDisabled
+@gw.rules.RuleName("CPR05000 - (DEMO) Create default auto exposures")
+internal class CPR05000DEMOCreatedefaultautoexposures {
+  static function doCondition(claim : entity.Claim) : boolean {
+/*start00rule*/
+return claim.LossType == LossType.TC_AUTO and claim.LossCause == LossCause.TC_VEHCOLLISION
+/*end00rule*/
+}
+
+  static function doAction(claim : entity.Claim, actions : gw.rules.Action) {
+/*start00rule*/
+ // find the insured vehicle incident
+var vehInc = claim.VehicleIncidentsOnly.firstWhere(\ v -> v.VehicleLossParty == LossPartyType.TC_INSURED)
+// if no insured vehicles or more than 1, abandon exposure creation
+if (vehInc == null)
+{
+  actions.exitToNext()
+}
+else // create exposure tied to single insured VehicleIncident
+{
+  var exposure : Exposure = claim.newExposure( "PACollisionCov","PACollisionCov" , true );
+  // the VehicleRU on the Policy is the one pointing to the Vehicle that is on the Incident
+  // Get the Vehicle RU that has the coverage associated with it
+  var vehRU = claim.Policy.Vehicles.firstWhere(\ v -> v.Vehicle == vehInc.Vehicle )
+  // get the coverage that is Personal Auto (PA) Collision
+  var vehCov = vehRU.Coverages.firstWhere(\ vc -> vc.Type == "PACollisionCov" )
+  exposure.Coverage = vehCov
+  exposure.LossParty = LossPartyType.TC_INSURED;          //insured
+  exposure.VehicleIncident = vehInc;
+
+  var claimant : ClaimContact = claim.Contacts.firstWhere(\ c -> c.Claimant )
+  if(claimant != null)
+  {
+    exposure.Claimant = claimant.Contact;
+    exposure.ClaimantType = ClaimantType.TC_INSURED //because reflection does not take until PCF updated,
+    // but field is required
+  }
+  else
+  {
+    exposure.Claimant = claim.Insured
+    exposure.ClaimantType = ClaimantType.TC_INSURED
+  }
+/*
+  // Only create 2nd exposure if rental was required
+  if (vehInc.VehTowedInd)
+  {
+    var exposure2 : Exposure = claim.newExposure( "COLL", "coll_tow_labor", true);
+    //exposure2.initializeIncident();
+    exposure2.LossParty = "insured";
+    if(claimant != null)
+    {
+      exposure2.Claimant = claimant.Contact;
+      exposure2.ClaimantType = "insured" //because reflection does not take until PCF updated, but field is req&apos;d
+    }
+
+    else
+    {
+    exposure2.Claimant = claim.Insured
+    exposure2.ClaimantType ="insured";
+    }
+
+    if(vehInc != null)
+    {
+       exposure2.VehicleIncident = vehinc;
+    }
+  }
+  // Training demo end
+*/
+  //clean up extra incidents
+  for (inc in claim.VehicleIncidentsOnly)
+  {
+     if(inc.Vehicle.Make == null and inc.Vehicle.Model == null and inc.Vehicle.Vin == null)
+     {
+        inc.remove()
+     }
+  }
+}
+
+//  var vehCoverages : VehicleCoverage[] = claim.Policy.AllCoverages.whereTypeIs(VehicleCoverage)
+//  var vehCov = vehCoverages.firstWhere(\ vc -> vc.RiskUnit as VehicleRU == vehRU )
+// var vehCov = vehCoverages.firstWhere(\ vc -> vc.Type =="COLL" )
+
+/*end00rule*/
+  }
+}

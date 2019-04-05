@@ -1,0 +1,24 @@
+package rules.Validation.ClaimValidationRules_dir
+
+@gw.rules.RuleDisabled
+@gw.rules.RuleName("CLV15000 - (DEMO) Require Driver License for Payment")
+internal class CLV15000DEMORequireDriverLicenseforPayment {
+  static function doCondition(claim : entity.Claim) : boolean {
+/*start00rule*/
+return exists (exp in claim.Exposures where exp.CoverageSubType ==
+  "PACollisionCov"/*Personal Auto Collision*/) and
+claim.LossLocation.State==State.TC_CA //California
+and
+((claim.Insured as Person).LicenseNumber == null or (claim.Insured as Person).LicenseState == null)
+
+/*end00rule*/
+}
+
+  static function doAction(claim : entity.Claim, actions : gw.rules.Action) {
+/*start00rule*/
+claim.rejectSubField(claim.Insured, "LicenseNumber", "payment",
+ "Insured driver's license number required in CA prior to payment", null, null)
+
+/*end00rule*/
+  }
+}
